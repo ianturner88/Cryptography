@@ -2,6 +2,7 @@
 #include<string>
 #include<fstream>
 #include<streambuf>
+#include <iomanip>
 using namespace std;
 
 void Input_String_Length(string input_string, int &input_string_length);
@@ -41,10 +42,12 @@ void Display_Instances_of_Letter(float letter_count[], int input_string_length, 
 	{
 		//determines how often a letter appears in the text file
 		percentage_occurrence = letter_count[i] / input_string_length * 100;
-		
+
 		//outputs each letter's percentage occurence in the text
-		cout << letters[i] << " " << percentage_occurrence << endl;
-	}
+		cout << fixed; 
+		cout << setprecision(2); 
+		cout << letters[i] << " " << letter_count[i] << " " << percentage_occurrence << endl;
+		}
 }
 
 void Letter_Counter(string input_string, string letters[], int &input_string_length, float letter_count[])
