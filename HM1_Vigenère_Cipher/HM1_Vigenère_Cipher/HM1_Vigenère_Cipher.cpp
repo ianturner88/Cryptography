@@ -7,14 +7,13 @@ using namespace std;
 
 void Input_String_Length(string input_string, int &input_string_length);
 void Alphabet(string letters[]);
-void Comparison_Test(int input_string_length, string input_string, int letter_count[], string letters[]);
-void Output_Comparison_Results(int letter_count[]);
+void Comparison_Test(int input_string_length, string input_string, int comparison_counter, string letters[]);
 
 int main(void)
 {
 	ifstream fin("Vigenère.txt");
 	string input_string((istreambuf_iterator<char>(fin)), istreambuf_iterator<char>());
-	int input_string_length = 0, letter_count[26] = { 0 };
+	int input_string_length = 0, letter_count[26] = { 0 }, comparison_counter = 0;
 	string letters[26];
 
 	//initialize the alphabet
@@ -24,19 +23,9 @@ int main(void)
 	Input_String_Length(input_string, input_string_length);
 
 	//identifies matches in the shifted string vs. base string
-	Comparison_Test(input_string_length, input_string, letter_count, letters);
-
-	Output_Comparison_Results(letter_count);
+	Comparison_Test(input_string_length, input_string, comparison_counter, letters);
 
 	getchar();
-}
-
-void Output_Comparison_Results(int letter_count[])
-{
-	for (int i = 0; i < 26; i++)
-	{
-		cout << i << ": " << letter_count[i] << endl;
-	}
 }
 
 void Input_String_Length(string input_string, int &input_string_length)
@@ -46,14 +35,13 @@ void Input_String_Length(string input_string, int &input_string_length)
 	input_string_length = input_string.length();
 }
 
-void Comparison_Test(int input_string_length, string input_string, int letter_count[], string letters[])
+void Comparison_Test(int input_string_length, string input_string, int comparison_counter, string letters[])
 {
 	/*identify the number of 'overlaps' in the 'base' string with 
 	the shifted version*/
 	
 	string base_input_string = "", comparison_input_string = "";
 	int counter = 1;
-	int test_counter = 0, test_variable;
 	
 	while (counter < input_string_length)
 	{
@@ -69,20 +57,15 @@ void Comparison_Test(int input_string_length, string input_string, int letter_co
 				{
 					if (base_input_string == letters[i])
 					{
-						letter_count[i] += 1;
+						comparison_counter++;
 					}
 				}
 			}
-
-			//test
-			test_counter++;
-			if (test_counter == 226)
-			{
-				test_variable = 9;
-			}
-
 		}
 
+		cout << counter << ":" << comparison_counter << endl;
+
+		comparison_counter = 0;
 		counter++;
 	}
 }

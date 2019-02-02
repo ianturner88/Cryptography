@@ -9,6 +9,7 @@ void Input_String_Length(string input_string, int &input_string_length);
 void Alphabet(string letters[]);
 void Letter_Counter(string input_string, string letters[], int &input_string_length, float letter_count[]);
 void Display_Instances_of_Letter(float letter_count[], int input_string_length, string letters[]);
+void Switch_Letters(string input_string, string letters[]);
 
 int main(void)
 {
@@ -29,9 +30,21 @@ int main(void)
 	//calculate the number of times a letter occurrs
 	Display_Instances_of_Letter(letter_count, input_string_length, letters);
 
+	//Switch_Letters(input_string, letters);
+
 	getchar();
 }
 
+void Switch_Letters(string input_string, string letters[])
+{
+	string letter_switch[26], replacement_case = "";
+	
+	for (int i = 0; i < 26; i++)
+	{
+		cout << letters[i] << endl;
+		cin >> letter_switch[i];
+	}
+}
 
 void Display_Instances_of_Letter(float letter_count[], int input_string_length, string letters[])
 {
