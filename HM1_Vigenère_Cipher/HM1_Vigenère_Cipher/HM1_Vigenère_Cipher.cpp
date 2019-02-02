@@ -5,13 +5,114 @@
 #include <iomanip>
 using namespace std;
 
+void Input_String_Length(string input_string, int &input_string_length);
+void Alphabet(string letters[]);
+void Comparison_Test(int input_string_length, string input_string, int letter_count[], string letters[]);
+void Output_Comparison_Results(int letter_count[]);
+
 int main(void)
 {
 	ifstream fin("Vigenère.txt");
-
 	string input_string((istreambuf_iterator<char>(fin)), istreambuf_iterator<char>());
+	int input_string_length = 0, letter_count[26] = { 0 };
+	string letters[26];
 
-	cout << input_string << endl;
+	//initialize the alphabet
+	Alphabet(letters);
+
+	//calculate the length of the string
+	Input_String_Length(input_string, input_string_length);
+
+	//identifies matches in the shifted string vs. base string
+	Comparison_Test(input_string_length, input_string, letter_count, letters);
+
+	Output_Comparison_Results(letter_count);
 
 	getchar();
+}
+
+void Output_Comparison_Results(int letter_count[])
+{
+	for (int i = 0; i < 26; i++)
+	{
+		cout << i << ": " << letter_count[i] << endl;
+	}
+}
+
+void Input_String_Length(string input_string, int &input_string_length)
+{
+	/*determines the length of the input string*/
+
+	input_string_length = input_string.length();
+}
+
+void Comparison_Test(int input_string_length, string input_string, int letter_count[], string letters[])
+{
+	/*identify the number of 'overlaps' in the 'base' string with 
+	the shifted version*/
+	
+	string base_input_string = "", comparison_input_string = "";
+	int counter = 1;
+	int test_counter = 0, test_variable;
+	
+	while (counter < input_string_length)
+	{
+		for (int i = 0; i < input_string_length && ((i + counter) < input_string_length); i++)
+		{
+			//set 1 char eqaul to each variable for comparision purposes
+			base_input_string = input_string[i + counter];
+			comparison_input_string = input_string[i];
+
+			if (base_input_string == comparison_input_string)
+			{
+				for (int i = 0; i < 26; i++)
+				{
+					if (base_input_string == letters[i])
+					{
+						letter_count[i] += 1;
+					}
+				}
+			}
+
+			//test
+			test_counter++;
+			if (test_counter == 226)
+			{
+				test_variable = 9;
+			}
+
+		}
+
+		counter++;
+	}
+}
+
+void Alphabet(string letters[])
+{
+	letters[0] = "a";
+	letters[1] = "b";
+	letters[2] = "c";
+	letters[3] = "d";
+	letters[4] = "e";
+	letters[5] = "f";
+	letters[6] = "g";
+	letters[7] = "h";
+	letters[8] = "i";
+	letters[9] = "j";
+	letters[10] = "k";
+	letters[11] = "l";
+	letters[12] = "m";
+	letters[13] = "n";
+	letters[14] = "o";
+	letters[15] = "p";
+	letters[16] = "q";
+	letters[17] = "r";
+	letters[18] = "s";
+	letters[19] = "t";
+	letters[20] = "u";
+	letters[21] = "v";
+	letters[22] = "w";
+	letters[23] = "x";
+	letters[24] = "y";
+	letters[25] = "z";
 }
