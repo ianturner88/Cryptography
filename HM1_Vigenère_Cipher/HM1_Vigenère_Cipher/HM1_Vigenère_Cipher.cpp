@@ -4,17 +4,19 @@
 #include<streambuf>
 #include<iomanip>
 #include<vector>
+#include <array>
 using namespace std;
 
 void Input_String_Length(string input_string, int &input_string_length);
 void Alphabet(string letters[]);
 void Comparison_Test(int input_string_length, string input_string, int comparison_counter, string letters[]);
-void Letter_Frequency(int letter_frequency[]);
+void Letter_Frequency(float english_letter_frequencies[]);
 void User_Inputs_Key_Length(int &key_length);
 void Letter_Count_at_Interval_X(int letter_count[], string input_string, int key_length, string letters[],
 	int &counter_letter_frequency_at_key_length);
-void Percentage_of_Letter_at_Interval(int letter_count[], vector<float> &letter_frequencies, string input_string, int key_length,
-	int letter_frequency[]);
+void Percentage_of_Letter_at_Interval(int letter_count[], vector<float> &text_letter_frequencies, string input_string, int key_length,
+	float english_letter_frequencies[]);
+void Find_Shift(vector<float> text_letter_frequencies, float english_letter_frequency[]);
 
 int main(void)
 {
@@ -23,12 +25,12 @@ int main(void)
 	int input_string_length = 0, letter_count[26] = { 0 }, comparison_counter = 0,
 		key_length = 0, number_of_letters = 0, counter_letter_frequency_at_key_length = 0;
 	string letters[26], letter_summation = "";
-	float letter_frequency[26];
-	vector<float> letter_frequencies;
+	float english_letter_frequencies[26];
+	vector<float> text_letter_frequencies;
 
 	//initialize the hard-coded arrays
 	Alphabet(letters);
-	Letter_Frequency(letter_frequency);
+	Letter_Frequency(english_letter_frequencies);
 
 	//calculate the length of the string
 	Input_String_Length(input_string, input_string_length);
@@ -44,31 +46,66 @@ int main(void)
 		/*determine the letter frequency at internvals of the key length*/
 
 		Letter_Count_at_Interval_X(letter_count, input_string, key_length, letters, counter_letter_frequency_at_key_length);
-		Percentage_of_Letter_at_Interval(letter_count, letter_frequencies, input_string, key_length, letter_frequency);
+		Percentage_of_Letter_at_Interval(letter_count, text_letter_frequencies, input_string, key_length, english_letter_frequencies);
+		Find_Shift(text_letter_frequencies, english_letter_frequencies);
 	}
 
 	getchar();
+	getchar();
 }
 
-void Find_Shift(vector<float> letter_frequencies, float letter_frequency[])
+void Find_Shift(vector<float> text_letter_frequencies, float english_letter_frequency[])
 {
-	int number_of_shifts = 0;
+	int total_number_of_shifts = 0, shifts_needed = 0, greatest_sum = 0, answer_number_of_shifts = 0, array_index_counter;
+	float sum = 0;
 	
 	for (int i = 0; i < 26; i++)
 	{
-		
+		array_index_counter = i + total_number_of_shifts;
+			
+		while ((array_index_counter < 26) && (total_number_of_shifts < 26))
+		{
+			sum += text_letter_frequencies[i] * english_letter_frequency[array_index_counter];
+
+			total_number_of_shifts++;
+			array_index_counter = i + total_number_of_shifts;
+
+			if (sum > greatest_sum)
+			{
+				answer_number_of_shifts = total_number_of_shifts;
+				greatest_sum = sum;
+			}
+		}
+
+		if (array_index_counter > 26)
+		{
+			int remaining_number_of_shifts = 26 - total_number_of_shifts;
+			
+			while (remaining_number_of_shifts > 0)
+			{
+				sum += text_letter_frequencies[i] * english_letter_frequency[array_index_counter];
+
+				remaining_number_of_shifts--;
+
+				if (sum > greatest_sum)
+				{
+					answer_number_of_shifts = total_number_of_shifts;
+					greatest_sum = sum;
+				}
+			}
+		}
 	}
 }
 
-void Percentage_of_Letter_at_Interval(int letter_count[], vector<float> &letter_frequencies, string input_string, int key_length,
-	float letter_frequency[])
+void Percentage_of_Letter_at_Interval(int letter_count[], vector<float> &text_letter_frequencies, string input_string, int key_length,
+	float english_letter_frequencies[])
 {
 	int input_string_length = input_string.length();
 
 	for (int i = 0; i < 26; i++)
 	{	
 		float percentage_letter_occurs = (float)letter_count[i] / (float)input_string_length;
-		letter_frequencies.push_back(percentage_letter_occurs);
+		text_letter_frequencies.push_back(percentage_letter_occurs);
 	}
 
 }
@@ -177,32 +214,32 @@ void Alphabet(string letters[])
 	letters[25] = "z";
 }
 
-void Letter_Frequency(float letter_frequency[])
+void Letter_Frequency(float english_letter_frequencies[])
 {
-	letter_frequency[0] = 8.167;
-	letter_frequency[1] = 1.492;
-	letter_frequency[2] = 2.782;
-	letter_frequency[3] = 4.253;
-	letter_frequency[4] = 12.702;
-	letter_frequency[5] = 2.228;
-	letter_frequency[6] = 2.015;
-	letter_frequency[7] = 6.094;
-	letter_frequency[8] = 6.966;
-	letter_frequency[9] = 0.153;
-	letter_frequency[10] = 0.772;
-	letter_frequency[11] = 4.025;
-	letter_frequency[12] = 2.406;
-	letter_frequency[13] = 6.749;
-	letter_frequency[14] = 7.507;
-	letter_frequency[15] = 1.929;
-	letter_frequency[16] = 0.095;
-	letter_frequency[17] = 5.987;
-	letter_frequency[18] = 6.327;
-	letter_frequency[19] = 9.056;
-	letter_frequency[20] = 2.758;
-	letter_frequency[21] = 0.978;
-	letter_frequency[22] = 2.360;
-	letter_frequency[23] = 0.150;
-	letter_frequency[24] = 1.974;
-	letter_frequency[25] = 0.074;
+	english_letter_frequencies[0] = 8.167;
+	english_letter_frequencies[1] = 1.492;
+	english_letter_frequencies[2] = 2.782;
+	english_letter_frequencies[3] = 4.253;
+	english_letter_frequencies[4] = 12.702;
+	english_letter_frequencies[5] = 2.228;
+	english_letter_frequencies[6] = 2.015;
+	english_letter_frequencies[7] = 6.094;
+	english_letter_frequencies[8] = 6.966;
+	english_letter_frequencies[9] = 0.153;
+	english_letter_frequencies[10] = 0.772;
+	english_letter_frequencies[11] = 4.025;
+	english_letter_frequencies[12] = 2.406;
+	english_letter_frequencies[13] = 6.749;
+	english_letter_frequencies[14] = 7.507;
+	english_letter_frequencies[15] = 1.929;
+	english_letter_frequencies[16] = 0.095;
+	english_letter_frequencies[17] = 5.987;
+	english_letter_frequencies[18] = 6.327;
+	english_letter_frequencies[19] = 9.056;
+	english_letter_frequencies[20] = 2.758;
+	english_letter_frequencies[21] = 0.978;
+	english_letter_frequencies[22] = 2.360;
+	english_letter_frequencies[23] = 0.150;
+	english_letter_frequencies[24] = 1.974;
+	english_letter_frequencies[25] = 0.074;
 }
