@@ -12,16 +12,19 @@ void Comparison_Test(int input_string_length, string input_string, int compariso
 void Letter_Frequency(int letter_frequency[]);
 void User_Inputs_Key_Length(int &key_length);
 void Letter_Count_at_Interval_X(int letter_count[], string input_string, int key_length, string letters[],
-	int number_of_letters);
+	int &counter_letter_frequency_at_key_length);
+void Percentage_of_Letter_at_Interval(int letter_count[], vector<float> &letter_frequencies, string input_string, int key_length,
+	int letter_frequency[]);
 
 int main(void)
 {
 	ifstream fin("Vigenère.txt");
 	string input_string((istreambuf_iterator<char>(fin)), istreambuf_iterator<char>());
-	int input_string_length = 0, letter_count[26] = { 0 }, comparison_counter = 0, letter_frequency[26],
-		key_length = 0, number_of_letters = 0, for_loop_counter = 0;
+	int input_string_length = 0, letter_count[26] = { 0 }, comparison_counter = 0,
+		key_length = 0, number_of_letters = 0, counter_letter_frequency_at_key_length = 0;
 	string letters[26], letter_summation = "";
-	vector<int> letter_frequencies;
+	float letter_frequency[26];
+	vector<float> letter_frequencies;
 
 	//initialize the hard-coded arrays
 	Alphabet(letters);
@@ -35,26 +38,52 @@ int main(void)
 
 	User_Inputs_Key_Length(key_length);
 
-	for (for_loop_counter; for_loop_counter < key_length; for_loop_counter++)
+	for (counter_letter_frequency_at_key_length; counter_letter_frequency_at_key_length < key_length; 
+		counter_letter_frequency_at_key_length++)
 	{
+		/*determine the letter frequency at internvals of the key length*/
 
+		Letter_Count_at_Interval_X(letter_count, input_string, key_length, letters, counter_letter_frequency_at_key_length);
+		Percentage_of_Letter_at_Interval(letter_count, letter_frequencies, input_string, key_length, letter_frequency);
 	}
 
 	getchar();
 }
 
+void Find_Shift(vector<float> letter_frequencies, float letter_frequency[])
+{
+	int number_of_shifts = 0;
+	
+	for (int i = 0; i < 26; i++)
+	{
+		
+	}
+}
+
+void Percentage_of_Letter_at_Interval(int letter_count[], vector<float> &letter_frequencies, string input_string, int key_length,
+	float letter_frequency[])
+{
+	int input_string_length = input_string.length();
+
+	for (int i = 0; i < 26; i++)
+	{	
+		float percentage_letter_occurs = (float)letter_count[i] / (float)input_string_length;
+		letter_frequencies.push_back(percentage_letter_occurs);
+	}
+
+}
+
 void Letter_Count_at_Interval_X(int letter_count[], string input_string, int key_length, string letters[], 
-	int number_of_letters, int &for_loop_counter)
+	int &counter_letter_frequency_at_key_length)
 {
 	string individual_letter;
 	bool match = false;
 	
-	int j = for_loop_counter;
+	int j = key_length;
 
 	while (j < input_string.length())
 	{
 		individual_letter = input_string[j];
-		number_of_letters++;
 			
 		for (int k = 0; (k < 26) && (match == false); k++)
 		{
@@ -148,7 +177,7 @@ void Alphabet(string letters[])
 	letters[25] = "z";
 }
 
-void Letter_Frequency(int letter_frequency[])
+void Letter_Frequency(float letter_frequency[])
 {
 	letter_frequency[0] = 8.167;
 	letter_frequency[1] = 1.492;
