@@ -83,7 +83,7 @@ void Switch_Letters(string input_string, string letters[], string switch_letters
 		{
 			affine_cipher += 26;
 		}
-
+		
 		switch_letters[i] = letters[affine_cipher];
 	}
 
