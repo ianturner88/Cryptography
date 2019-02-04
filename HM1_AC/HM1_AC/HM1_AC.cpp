@@ -9,7 +9,8 @@ void Input_String_Length(string input_string, int &input_string_length);
 void Alphabet(string letters[]);
 void Letter_Counter(string input_string, string letters[], int &input_string_length, float letter_count[]);
 void Display_Instances_of_Letter(float letter_count[], int input_string_length, string letters[]);
-void Switch_Letters(string input_string, string letters[]);
+void Switch_Letters(string input_string, string letters[], string switch_letters[]);
+void Output_new_string(string input_string, string switch_letters[], string letters[]);
 
 int main(void)
 {
@@ -17,7 +18,7 @@ int main(void)
 
 	int input_string_length = 0; 
 	float letter_count[26] = { 0 };
-	string letters[26];
+	string letters[26], switch_letters[26];
 	//read text file into a string
 	string input_string((istreambuf_iterator<char>(fin)), istreambuf_iterator<char>());
 
@@ -30,19 +31,65 @@ int main(void)
 	//calculate the number of times a letter occurrs
 	Display_Instances_of_Letter(letter_count, input_string_length, letters);
 
-	//Switch_Letters(input_string, letters);
+	Switch_Letters(input_string, letters, switch_letters);
+
+	Output_new_string(input_string, switch_letters, letters);
 
 	getchar();
 }
 
-void Switch_Letters(string input_string, string letters[])
+
+void Output_new_string(string input_string, string switch_letters[], string letters[])
 {
-	string letter_switch[26], replacement_case = "";
+	string answer, replacement;
+	bool match;
+	
+	for (int i = 0; i < input_string.length(); i++)
+	{
+		replacement = input_string[i];
+
+		match = false;
+
+		for (int j = 0; j < 26 && match == false; j++)
+		{
+			if (replacement == switch_letters[j])
+			{
+				match = true;
+				replacement = letters[j];
+			}
+		}
+
+		answer += replacement;
+	}
+
+	cout << "answer: " << answer << endl;
+}
+
+
+void Switch_Letters(string input_string, string letters[], string switch_letters[])
+{
+	int affine_cipher;
 	
 	for (int i = 0; i < 26; i++)
 	{
-		cout << letters[i] << endl;
-		cin >> letter_switch[i];
+		affine_cipher = 9 * i + 8;
+
+		while (affine_cipher > 25)
+		{
+			affine_cipher -= 26;
+		}
+
+		while (affine_cipher < 0)
+		{
+			affine_cipher += 26;
+		}
+
+		switch_letters[i] = letters[affine_cipher];
+	}
+
+	for (int i = 0; i < 26; i++)
+	{
+		cout << i << " " << letters[i] << " " << switch_letters[i] << endl;
 	}
 }
 
