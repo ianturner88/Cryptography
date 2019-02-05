@@ -56,19 +56,39 @@ int main(void)
 
 void Find_Shift(vector<float> text_letter_frequencies, float english_letter_frequency[])
 {
-	int total_number_of_shifts = 0, shifts_needed = 0, greatest_sum = 0, answer_number_of_shifts = 0, array_index_counter;
+	int total_number_of_shifts = 0, shifts_needed = 0, greatest_sum = 0, answer_number_of_shifts = 0, array_index_counter = 0;
 	float sum = 0;
 	
-	for (int i = 0; i < 26; i++)
+	while ((array_index_counter < 26) && (total_number_of_shifts < 26))
 	{
-		array_index_counter = i + total_number_of_shifts;
-			
-		while ((array_index_counter < 26) && (total_number_of_shifts < 26))
+		for (int i = 0; i < 26; i++)
 		{
 			sum += text_letter_frequencies[i] * english_letter_frequency[array_index_counter];
 
-			total_number_of_shifts++;
 			array_index_counter = i + total_number_of_shifts;
+		}
+
+		total_number_of_shifts++;
+
+		if (sum > greatest_sum)
+		{
+			answer_number_of_shifts = total_number_of_shifts;
+			greatest_sum = sum;
+		}
+	}
+
+	if (array_index_counter > 26)
+	{
+		int remaining_number_of_shifts = 26 - total_number_of_shifts;
+			
+		while (remaining_number_of_shifts > 0)
+		{
+			for (int i = 0; i < 26; i++)
+			{
+				sum += text_letter_frequencies[i] * english_letter_frequency[array_index_counter];
+			}
+			
+			remaining_number_of_shifts--;
 
 			if (sum > greatest_sum)
 			{
@@ -76,25 +96,8 @@ void Find_Shift(vector<float> text_letter_frequencies, float english_letter_freq
 				greatest_sum = sum;
 			}
 		}
-
-		if (array_index_counter > 26)
-		{
-			int remaining_number_of_shifts = 26 - total_number_of_shifts;
-			
-			while (remaining_number_of_shifts > 0)
-			{
-				sum += text_letter_frequencies[i] * english_letter_frequency[array_index_counter];
-
-				remaining_number_of_shifts--;
-
-				if (sum > greatest_sum)
-				{
-					answer_number_of_shifts = total_number_of_shifts;
-					greatest_sum = sum;
-				}
-			}
-		}
 	}
+	
 }
 
 void Percentage_of_Letter_at_Interval(int letter_count[], vector<float> &text_letter_frequencies, string input_string, int key_length,
