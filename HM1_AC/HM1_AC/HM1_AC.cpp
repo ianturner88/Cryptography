@@ -72,7 +72,7 @@ void Switch_Letters(string input_string, string letters[], string switch_letters
 	
 	for (int i = 0; i < 26; i++)
 	{
-		affine_cipher = 3 * i + 13;
+		affine_cipher = 17 * i + 7;
 
 		while (affine_cipher > 25)
 		{
@@ -85,6 +85,11 @@ void Switch_Letters(string input_string, string letters[], string switch_letters
 		}
 		
 		switch_letters[i] = letters[affine_cipher];
+
+		//test
+		string test = "", test1 = "";
+		test = switch_letters[i];
+		test1 = letters[i];
 	}
 
 	for (int i = 0; i < 26; i++)
