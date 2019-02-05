@@ -9,16 +9,18 @@ void Input_String_Length(string input_string, int &input_string_length);
 void Alphabet(string letters[]);
 void Letter_Counter(string input_string, string letters[], int &input_string_length, float letter_count[]);
 void Display_Instances_of_Letter(float letter_count[], int input_string_length, string letters[]);
-void Switch_Letters(string input_string, string letters[], string switch_letters[]);
-void Output_new_string(string input_string, string switch_letters[], string letters[]);
+void Identify_Char_to_Decode(string input_string, string &replacement, int index_counter);
+void Identify_Replacement_Alphabet_Numerical_Value(string replacement, int &letter_numerical_value, string letters[]);
+void Affine_Cipher_Equation(int &letter_numerical_value, string letters[], int &affine_cipher);
+void Output_Answer(int affine_cipher, string letters[]);
 
 int main(void)
 {
 	ifstream fin("HM1_AC.txt");
 
-	int input_string_length = 0; 
+	int input_string_length = 0, index_counter = 0, letter_numerical_value = 0, affine_cipher = 0;
 	float letter_count[26] = { 0 };
-	string letters[26], switch_letters[26];
+	string letters[26], switch_letters[26], replacement = "";
 	//read text file into a string
 	string input_string((istreambuf_iterator<char>(fin)), istreambuf_iterator<char>());
 
@@ -31,71 +33,52 @@ int main(void)
 	//calculate the number of times a letter occurrs
 	Display_Instances_of_Letter(letter_count, input_string_length, letters);
 
-	Switch_Letters(input_string, letters, switch_letters);
+	while (index_counter < input_string.length())
+	{
+		Identify_Char_to_Decode(input_string, replacement, index_counter);
+		Identify_Replacement_Alphabet_Numerical_Value(replacement, letter_numerical_value, letters);
+		Affine_Cipher_Equation(letter_numerical_value, letters, affine_cipher);
+		Output_Answer(affine_cipher, letters);
 
-	Output_new_string(input_string, switch_letters, letters);
+		index_counter++;
+	}
 
 	getchar();
 }
 
-
-void Output_new_string(string input_string, string switch_letters[], string letters[])
+void Output_Answer(int affine_cipher, string letters[])
 {
-	string answer, replacement;
-	bool match;
-	
-	for (int i = 0; i < input_string.length(); i++)
-	{
-		replacement = input_string[i];
-
-		match = false;
-
-		for (int j = 0; j < 26 && match == false; j++)
-		{
-			if (replacement == switch_letters[j])
-			{
-				match = true;
-				replacement = letters[j];
-			}
-		}
-
-		answer += replacement;
-	}
-
-	cout << "answer: " << answer << endl;
+	cout << letters[affine_cipher];
 }
 
-
-void Switch_Letters(string input_string, string letters[], string switch_letters[])
+void Affine_Cipher_Equation(int &letter_numerical_value, string letters[], int &affine_cipher)
 {
-	int affine_cipher;
-	
-	for (int i = 0; i < 26; i++)
+	affine_cipher = 23 * letter_numerical_value + 23;
+
+	while (affine_cipher > 25)
 	{
-		affine_cipher = 17 * i + 7;
-
-		while (affine_cipher > 25)
-		{
-			affine_cipher -= 26;
-		}
-
-		while (affine_cipher < 0)
-		{
-			affine_cipher += 26;
-		}
-		
-		switch_letters[i] = letters[affine_cipher];
-
-		//test
-		string test = "", test1 = "";
-		test = switch_letters[i];
-		test1 = letters[i];
+		affine_cipher -= 26;
 	}
 
-	for (int i = 0; i < 26; i++)
+	while (affine_cipher < 0)
 	{
-		cout << i << " " << letters[i] << " " << switch_letters[i] << endl;
+		affine_cipher += 26;
 	}
+}
+
+void Identify_Replacement_Alphabet_Numerical_Value(string replacement, int &letter_numerical_value, string letters[])
+{
+	letter_numerical_value = 0;
+
+	while (replacement != letters[letter_numerical_value])
+	{
+		letter_numerical_value++;
+	}
+}
+
+void Identify_Char_to_Decode(string input_string, string &replacement, int index_counter)
+{
+	replacement = input_string[index_counter];
 }
 
 void Display_Instances_of_Letter(float letter_count[], int input_string_length, string letters[])
